@@ -22,8 +22,8 @@ const controlRecipes = async function () {
 
     recipeView.render(model.state.recipe);
   } catch (err) {
-    alert(err);
-    console.log(err);
+    recipeView.renderError();
+    // alert(err);
   }
 };
 
@@ -35,6 +35,11 @@ controlRecipes(
 
 //Listen for hash change event, and load the page with the url event,
 //Instead having a lot of events we have one arr, of the evens, and we loop for that event and cal the same func
-['hashchange', 'load'].forEach(event => {
-  window.addEventListener(event, controlRecipes);
-});
+// ['hashchange', 'load'].forEach(event => {
+//   window.addEventListener(event, controlRecipes);
+// });
+//Implement publisher-subscribe pattern
+const init = function () {
+  recipeView.addHandlerRender(controlRecipes);
+};
+init();

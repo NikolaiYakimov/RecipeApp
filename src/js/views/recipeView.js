@@ -6,12 +6,10 @@ import fracty from 'fracty';
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
+  #errorMessage = 'We could not find that recipe. Please try another one!';
   //Get the data from the controller and render the generated Markup
   render(data) {
     this.#data = data;
-    console.log(this.#data);
-    console.log('Parent element:', this.#parentElement);
-
     const markup = this.#generateMarkup();
     this.#clear();
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
@@ -20,16 +18,37 @@ class RecipeView {
   #clear() {
     this.#parentElement.innerHTML = '';
   }
+  addHandlerRender(handle) {
+    ['hashchange', 'load'].forEach(event => {
+      window.addEventListener(event, handle);
+    });
+  }
 
+  renderError(message = this.#errorMessage) {
+    const markup = ` 
+         <div class="error">
+            <div>
+              <svg>
+                <use href="${icons}#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div> 
+`;
+
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
   renderSpinner = function () {
-    const markup = ` <div class="spinner">
+    const markup = `
+     <div class="spinner">
           <svg>
             <use href="${icons}#icon-loader"></use>
           </svg>
-        </div>
+     </div>
         `;
 
-    this.#parentElement.innerHTML = '';
+    this.#clear();
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   };
   #generateMarkup() {
