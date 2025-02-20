@@ -1,14 +1,17 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
-
-const recipeContainer = document.querySelector('.recipe');
+import searchView from './views/searchView.js';
+import resultView from './views/resultView.js';
+import paginationView from './views/paginationView.js';
 
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
 //Api to fetch : https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886
 
 ///////////////////////////////////////
-
+// if (module.hot) {
+//   module.hot.accept();
+// }
 const controlRecipes = async function () {
   try {
     const id = window.location.hash.replace('#', '');
@@ -21,25 +24,44 @@ const controlRecipes = async function () {
     //Rendering the recipe
 
     recipeView.render(model.state.recipe);
+
+    //Render initial pagination buttons
   } catch (err) {
     recipeView.renderError();
     // alert(err);
   }
 };
 
-controlRecipes(
-  'https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886'
-);
+const controlSearchResults = async function () {
+  try {
+    resultView.renderSpinner();
+    //Get search value
+    const query = searchView.getQuery();
+    if (!query) return;
 
-// const renderRecipe = function (data) {};
+    //Load search results
+    await model.loadSearchResults(query);
 
-//Listen for hash change event, and load the page with the url event,
-//Instead having a lot of events we have one arr, of the evens, and we loop for that event and cal the same func
-// ['hashchange', 'load'].forEach(event => {
-//   window.addEventListener(event, controlRecipes);
-// });
+    //Render search results
+    resultView.render(model.getSearchResultsPage());
+
+    //Render initial pagination buttons
+    paginationView.render(model.state.search);
+  } catch (err) {
+    console.error(err);
+    // resultView.renderError();
+  }
+};
+const controlPagination = function (goToPage) {
+  //Render new Results
+  resultView.render(model.getSearchResultsPage(goToPage));
+  //Render new pagination buttons
+  paginationView.render(model.state.search);
+};
 //Implement publisher-subscribe pattern
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
+  searchView.addHandlerSearches(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination);
 };
 init();
