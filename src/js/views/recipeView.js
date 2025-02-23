@@ -7,12 +7,22 @@ class RecipeView extends View {
   _errorMessage = 'We could not find that recipe. Please try another one!';
   _successMessage = '';
 
-  addHandlerRender(handle) {
+  addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(event => {
-      window.addEventListener(event, handle);
+      window.addEventListener(event, handler);
     });
   }
 
+  addHandlerUpdateServings(handler) {
+    this._parentElement.addEventListener('click', function (event) {
+      const btn = event.target.closest('.btn--update-servings');
+      //check if the clicked target is not the button, and return nothing if is like that
+      if (!btn) return;
+      const { updateTo } = btn.dataset;
+      console.log(Number(updateTo));
+      if (Number(updateTo) > 0) handler(Number(updateTo));
+    });
+  }
   _generateMarkup() {
     return `  <figure class="recipe__fig">
     <img src="${this._data.image}" alt="${
@@ -43,12 +53,16 @@ class RecipeView extends View {
       <span class="recipe__info-text">servings</span>
 
       <div class="recipe__info-buttons">
-        <button class="btn--tiny btn--increase-servings">
+        <button class="btn--tiny btn--update-servings" data-update-to="${
+          this._data.servings - 1
+        }">
           <svg>
             <use href="${icons}#icon-minus-circle"></use>
           </svg>
         </button>
-        <button class="btn--tiny btn--increase-servings">
+        <button class="btn--tiny btn--update-servings" data-update-to=${
+          this._data.servings + 1
+        }>
           <svg>
             <use href="${icons}#icon-plus-circle"></use>
           </svg>
