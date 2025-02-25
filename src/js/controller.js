@@ -3,6 +3,7 @@ import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultView from './views/resultView.js';
 import paginationView from './views/paginationView.js';
+import bookmarksView from './views/bookmarksView.js';
 
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
@@ -21,6 +22,7 @@ const controlRecipes = async function () {
 
     //Update results view to mark selected search result
     resultView.update(model.getSearchResultsPage());
+    bookmarksView.update(model.state.bookmarks);
 
     //Load recipe
     await model.loadRecipe(id);
@@ -71,10 +73,21 @@ const controlServings = function (newServings) {
   recipeView.update(model.state.recipe);
 };
 
+const controlAddBookmark = function () {
+  //Add/remove bookmark
+  if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
+  else model.removeBookmark(model.state.recipe.id);
+  //Update the recipe view
+  recipeView.update(model.state.recipe);
+  //Render the bookmarks
+  bookmarksView.render(model.state.bookmarks);
+};
+
 //Implement publisher-subscribe pattern
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearches(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
 };
