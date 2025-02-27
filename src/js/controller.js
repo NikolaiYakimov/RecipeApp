@@ -1,9 +1,11 @@
 import * as model from './model.js';
+import { MODAL_CLOSE_SEC } from './config.js';
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultView from './views/resultView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
+import addRecipeView from './views/addRecipeView.js';
 
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
@@ -31,9 +33,12 @@ const controlRecipes = async function () {
 
     recipeView.render(model.state.recipe);
 
+    //Updating bookmarks view
+
     //Render initial pagination buttons
   } catch (err) {
     recipeView.renderError();
+    console.error(err);
     // alert(err);
   }
 };
@@ -82,13 +87,40 @@ const controlAddBookmark = function () {
   //Render the bookmarks
   bookmarksView.render(model.state.bookmarks);
 };
+const controlBookmarks = function () {
+  bookmarksView.render(model.state.bookmarks);
+};
 
+const controlAddRecipe = async function (newRecipe) {
+  try {
+    //Show loading spinner
+    addRecipeView.renderSpinner();
+    //Upload the new recipe
+    await model.uploadRecipe(newRecipe);
+    console.log(model.state.recipe);
+
+    //Render the recipe
+    recipeView.render(model.state.recipe);
+    //Display success message
+    addRecipeView.renderMessage();
+    //Close window after a certain time
+    setTimeout(function () {
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
+  } catch (err) {
+    console.error(err);
+    addRecipeView.renderError(err.message);
+  }
+};
 //Implement publisher-subscribe pattern
 const init = function () {
+  bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearches(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
+  addRecipeView.addHandlerUpload(controlAddRecipe);
 };
+
 init();
