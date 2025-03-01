@@ -102,7 +102,14 @@ const controlAddRecipe = async function (newRecipe) {
     //Render the recipe
     recipeView.render(model.state.recipe);
     //Display success message
+
     addRecipeView.renderMessage();
+    //Render the bookmark after upload
+    bookmarksView.render(model.state.bookmarks);
+
+    //Change ID in the URL
+    window.history.pushState(null, null, `#${model.state.recipe.id}`);
+
     //Close window after a certain time
     setTimeout(function () {
       addRecipeView.toggleWindow();

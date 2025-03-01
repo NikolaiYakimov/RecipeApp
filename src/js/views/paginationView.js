@@ -20,15 +20,19 @@ class PaginationView extends View {
     );
     //Page1 , and there are other pages
     if (curPage === 1 && numPages > 1) {
-      return this._generateNextButtonMarkup(curPage);
+      return `${this._generateNextButtonMarkup(curPage)}
+        <span class="pagination__current">${curPage} of ${numPages}</span>
+`;
     }
     //Last page
     if (curPage === numPages && numPages > 1) {
-      return this._generatePrevButtonMarkup(curPage);
+      return `<span class="pagination__current">${curPage} of ${numPages}</span>
+           ${this._generatePrevButtonMarkup(curPage)}`;
     }
     //Other page
     if (curPage < numPages && curPage > 1) {
       return `${this._generatePrevButtonMarkup(curPage)}
+       <span class="pagination__current">${curPage} of ${numPages}</span>
       ${this._generateNextButtonMarkup(curPage)}`;
     }
     //Page 1, and there are NO other pages
