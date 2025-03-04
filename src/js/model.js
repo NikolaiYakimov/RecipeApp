@@ -45,18 +45,29 @@ export const loadRecipe = async function (id) {
     throw err;
   }
 };
-
+/**
+ *
+ * @param {String} query -the recipe string we search for
+ */
 export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
     const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
-    console.log(KEY, state.search.results);
-    state.search.results = data.data.recipes.map(rec => {
+    //Add the full data about the recipes, so we can use it in sortResults method
+    const fullRecipes = await Promise.all(
+      data.data.recipes.map(async rec => {
+        const fullData = await AJAX(`${API_URL}${rec.id}?key=${KEY}`);
+        return createRecipeObject(fullData);
+      })
+    );
+    state.search.results = fullRecipes.map(rec => {
       return {
         id: rec.id,
         title: rec.title,
         publisher: rec.publisher,
-        image: rec.image_url,
+        cookingTime: rec.cookingTime,
+        image: rec.image,
+        ingredients: rec.ingredients,
         ...(rec.key && { key: rec.key }),
       };
     });
@@ -68,6 +79,11 @@ export const loadSearchResults = async function (query) {
   }
 };
 
+/**
+ *
+ * @param {Number} page -the page you are on
+ * @returns {Array}- Array of recipes obj on this page
+ */
 export const getSearchResultsPage = function (page = state.search.page) {
   state.search.page = page;
   const start = (page - 1) * state.search.resultsPerPage;
@@ -109,11 +125,9 @@ export const removeBookmark = function (id) {
 
 const init = function () {
   const storage = localStorage.getItem('bookmarks');
-  console.log(storage);
   if (storage) state.bookmarks = JSON.parse(storage);
 };
 init();
-console.log(state.bookmarks);
 
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
@@ -127,7 +141,6 @@ export const uploadRecipe = async function (newRecipe) {
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
         const ingArr = ing[1].split(',').map(element => element.trim());
-        // const ingArr = ing[1].replaceAll(' ', '').split(',');
         if (ingArr.length !== 3)
           throw new Error(
             'wrong ingredient format! Please use the correct format'
@@ -155,6 +168,31 @@ export const uploadRecipe = async function (newRecipe) {
     // console.log(recipe);
   } catch (err) {
     // console.error(err);
+    throw err;
+  }
+};
+
+/**
+ *
+ * @param {String} sortType -Property of recipe you want to sort by
+ */
+export const sortResults = function (sortType) {
+  try {
+    switch (sortType) {
+      case 'ingredients':
+        state.search.results.sort(
+          (a, b) => a.ingredients.length - b.ingredients.length
+        );
+        break;
+      case 'duration':
+        // console.log('SortByTime');
+        state.search.results.sort((a, b) => a.cookingTime - b.cookingTime);
+        break;
+      default:
+        throw new Error('Invalid sort type: ' + sortType);
+    }
+  } catch (err) {
+    console.error(err);
     throw err;
   }
 };

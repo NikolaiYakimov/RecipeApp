@@ -6,6 +6,7 @@ import resultView from './views/resultView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
 import addRecipeView from './views/addRecipeView.js';
+import resultSortView from './views/resultSortView.js';
 
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
@@ -54,6 +55,7 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(query);
 
     //Render search results
+    resultSortView.renderSort();
     resultView.render(model.getSearchResultsPage());
 
     //Render initial pagination buttons
@@ -119,6 +121,16 @@ const controlAddRecipe = async function (newRecipe) {
     addRecipeView.renderError(err.message);
   }
 };
+const controlResultsSorts = function (sortType) {
+  try {
+    //Sort results
+    model.sortResults(sortType);
+
+    resultView.render(model.getSearchResultsPage());
+  } catch (err) {
+    resultSortView.renderError(err.message);
+  }
+};
 //Implement publisher-subscribe pattern
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
@@ -126,6 +138,7 @@ const init = function () {
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearches(controlSearchResults);
+  resultSortView.addHandlerSortSearches(controlResultsSorts);
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
 };

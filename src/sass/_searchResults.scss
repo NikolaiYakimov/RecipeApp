@@ -1,11 +1,66 @@
+// Оставете градиента непроменен
 .search-results {
-  padding: 3rem 0;
+  padding: 5rem 0;
   display: flex;
   flex-direction: column;
+  position: relative;
+
+  &__sort {
+    position: absolute;
+    top: 1.4rem; // Adjust based on your header height
+    right: 1.5rem;
+    display: flex;
+    gap: 0.8rem;
+    z-index: 10;
+  }
+}
+
+.sort-btn {
+  padding: 0.4rem;
+  border-radius: 50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+
+  // transition: all 0.2s;
+  // transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &--ingredients,
+  &--duration {
+    background-image: $gradient; // Използваме основния градиент
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      background-image: linear-gradient(
+        to right bottom,
+        darken($color-grad-1, 5%),
+        darken($color-grad-2, 5%)
+      );
+      transform: translateY(-2px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &:focus {
+    outline: 2px solid rgba($color-primary, 0.5);
+    outline-offset: 2px;
+  }
+
+  &__icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    fill: currentColor;
+  }
 }
 
 .results {
-  list-style: none;
+  list-style: circle;
   margin-bottom: 2rem;
 }
 

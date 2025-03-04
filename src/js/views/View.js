@@ -26,6 +26,13 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  renderSort() {
+    const markup = this._generateMarkup();
+
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
   update(data) {
     this._data = data;
     const newMarkup = this._generateMarkup();
