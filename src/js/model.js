@@ -134,40 +134,41 @@ const clearBookmarks = function () {
 };
 
 export const uploadRecipe = async function (newRecipe) {
-  console.log(newRecipe);
-
   try {
-    const ingredients = Object.entries(newRecipe)
-      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
-      .map(ing => {
-        const ingArr = ing[1].split(',').map(element => element.trim());
-        if (ingArr.length !== 3)
-          throw new Error(
-            'wrong ingredient format! Please use the correct format'
-          );
-        const [quantity, unit, description] = ingArr;
-        return {
-          quantity: quantity ? Number(quantity) : null,
-          unit,
-          description,
-        };
-      });
+    const ingredients = {};
+    Object.entries(newRecipe).forEach(([key, value]) => {
+      if (key.startsWith('ingredient-')) {
+        const parts = key.split('-');
+        const id = parts[1];
+        const type = parts[2];
+
+        if (!ingredients[id]) ingredients[id] = {};
+        ingredients[id][type] = value;
+      }
+    });
+    const formattedIngredients = Object.values(ingredients)
+      .filter(ingredient => ingredient.description)
+      .map(ing => ({
+        quantity: ing.quantity ? Number(ing.quantity) : null,
+        unit: ing.unit ? ing.unit : null,
+        description: ing.description,
+      }));
 
     const recipe = {
       title: newRecipe.title,
       publisher: newRecipe.publisher,
       source_url: newRecipe.sourceUrl,
       image_url: newRecipe.image,
-      servings: +newRecipe.servings,
-      cooking_time: +newRecipe.cookingTime,
-      ingredients,
+      servings: Number(newRecipe.servings),
+      cooking_time: Number(newRecipe.cookingTime),
+      ingredients: formattedIngredients,
     };
+
     const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
-    // console.log(recipe);
   } catch (err) {
-    // console.error(err);
+    console.error(err);
     throw err;
   }
 };

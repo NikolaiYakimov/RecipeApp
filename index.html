@@ -79,6 +79,23 @@
     </header>
 
     <div class="search-results">
+      <div class="search-results__sort">
+        <!-- <button class="sort-btn sort-btn--ingredients">
+          <svg aria-hidden="true" class="sort-btn__icon" viewBox="0 0 24 24"> -->
+        <!-- <path
+              d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.46L23 5.05h-5V1h-1.97v4.05h-5l1.92 16.53c.1.82.79 1.41 1.63 1.41zm-11.65 0h1.66c.82 0 1.47-.64 1.57-1.46l1.12-8.07H5.51l1.12 8.07c.1.82.75 1.46 1.57 1.46zM3.06 7.01h1.66c.82 0 1.47-.64 1.57-1.46L7.4 3.53H2.21l1.27 10.02c.1.82.75 1.46 1.58 1.46z" /> -->
+        <!-- <use xlink:href="#icon-ingredients"></use>
+          </svg>
+        </button> -->
+
+        <!-- <button class="sort-btn sort-btn--duration">
+          <svg aria-hidden="true" class="sort-btn__icon" viewBox="0 0 24 24"> -->
+        <!-- <path
+              d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" /> -->
+        <!-- <use xlink:href="#icon-clock"></use>
+          </svg>
+        </button> -->
+      </div>
       <ul class="results">
 
         <!-- 
@@ -244,43 +261,110 @@
     </div>
   </div>
 
-  <div class="overlay hidden"></div>
+  <!-- <div class="overlay hidden"></div>
   <div class="add-recipe-window hidden ">
     <button class="btn--close-modal">&times;</button>
     <form class="upload">
       <div class="upload__column">
         <h3 class="upload__heading">Recipe data</h3>
         <label>Title</label>
-        <input value="TEST23" required name="title" type="text" />
+        <input value="" required name="title" type="text" />
         <label>URL</label>
-        <input value="TEST23" required name="sourceUrl" type="text" />
+        <input value="" required name="sourceUrl" type="text" />
         <label>Image URL</label>
-        <input value="TEST23" required name="image" type="text" />
+        <input value="" required name="image" type="text" />
         <label>Publisher</label>
-        <input value="TEST23" required name="publisher" type="text" />
+        <input value="" required name="publisher" type="text" />
         <label>Prep time</label>
-        <input value="23" required name="cookingTime" type="number" />
+        <input value="" required name="cookingTime" type="number" />
         <label>Servings</label>
-        <input value="23" required name="servings" type="number" />
+        <input value="" required name="servings" type="number" />
       </div>
 
       <div class="upload__column">
         <h3 class="upload__heading">Ingredients</h3>
-        <label>Ingredient 1</label>
-        <input value="0.5,kg,Rice" type="text" required name="ingredient-1"
-          placeholder="Format: 'Quantity,Unit,Description'" />
-        <label>Ingredient 2</label>
-        <input value="1,,Avocado" type="text" name="ingredient-2" placeholder="Format: 'Quantity,Unit,Description'" />
-        <label>Ingredient 3</label>
-        <input value=",,salt" type="text" name="ingredient-3" placeholder="Format: 'Quantity,Unit,Description'" />
-        <label>Ingredient 4</label>
-        <input type="text" name="ingredient-4" placeholder="Format: 'Quantity,Unit,Description'" />
-        <label>Ingredient 5</label>
-        <input type="text" name="ingredient-5" placeholder="Format: 'Quantity,Unit,Description'" />
-        <label>Ingredient 6</label>
-        <input type="text" name="ingredient-6" placeholder="Format: 'Quantity,Unit,Description'" />
+        <div class="ingredient-group">
+          <label>Ingredient 1</label>
+          <div class="ingredient-fields">
+            <input type="number" placeholder="Qty" name="ingredient-1-quantity" />
+            <input type="text" placeholder="Unit" name="ingredient-1-unit" />
+            <input type="text" placeholder="Desc" name="ingredient-1-description" />
+          </div>
+          <label>Ingredient 2</label>
+          <div class="ingredient-fields">
+            <input type="number" placeholder="Qty" name="ingredient-1-quantity" />
+            <input type="text" placeholder="Unit" name="ingredient-1-unit" />
+            <input type="text" placeholder="Desc" name="ingredient-1-description" />
+            <button type="button" class="btn btn--add-ingredient">
+              <svg>
+                <use href="src/img/icons.svg#icon-plus-circle"></use>
+              </svg>
+              <span>Add Ingredient</span>
+            </button>
+          </div>
+
+        </div>
+
+
+        <button class="btn  upload__btn">
+          <svg>
+            <use href="src/img/icons.svg#icon-upload-cloud"></use>
+          </svg>
+          <span>Upload</span>
+        </button>
+    </form>
+  </div> -->
+  <div class="overlay hidden"></div>
+  <div class="add-recipe-window hidden">
+    <button class="btn--close-modal">&times;</button>
+    <form class="upload">
+      <!-- Recipe Data Column -->
+      <div class="upload__column">
+        <h3 class="upload__heading">Recipe data</h3>
+        <label>Title</label>
+        <input value="" required name="title" type="text" />
+        <label>URL</label>
+        <input value="" required name="sourceUrl" type="text" />
+        <label>Image URL</label>
+        <input value="" required name="image" type="text" />
+        <label>Publisher</label>
+        <input value="" required name="publisher" type="text" />
+        <label>Prep time</label>
+        <input value="" required name="cookingTime" type="number" />
+        <label>Servings</label>
+        <input value="" required name="servings" type="number" />
       </div>
 
+      <!-- Ingredients Column -->
+      <div class="upload__column ">
+        <h3 class="upload__heading  ">Ingredients</h3>
+        <div class="ingredients-container">
+          <div class="ingredient-group">
+            <label>Ingredient 1</label>
+            <div class="ingredient-fields">
+              <input type="number" placeholder="Qty" name="ingredient-1-quantity" />
+              <input type="text" placeholder="Unit" name="ingredient-1-unit" />
+              <input type="text" placeholder="Desc" name="ingredient-1-description" />
+            </div>
+          </div>
+          <div class="ingredient-group">
+            <label>Ingredient 2</label>
+            <div class="ingredient-fields">
+              <input type="number" placeholder="Qty" name="ingredient-2-quantity" />
+              <input type="text" placeholder="Unit" name="ingredient-2-unit" />
+              <input type="text" placeholder="Desc" name="ingredient-2-description" />
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn--add-ingredient" id="add-ingredient-btn">
+          <svg>
+            <use href="src/img/icons.svg#icon-plus-circle"></use>
+          </svg>
+          <span>Add Ingredient</span>
+        </button>
+      </div>
+
+      <!-- Upload Button -->
       <button class="btn upload__btn">
         <svg>
           <use href="src/img/icons.svg#icon-upload-cloud"></use>
