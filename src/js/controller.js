@@ -134,6 +134,7 @@ const controlResultsSorts = function (sortType) {
 
 const controlShoppingList = function () {
   //Create a new list If there is none yet
+  model.state.items = [];
 
   model.state.recipe.ingredients.forEach(ing => {
     model.addItemToShoppingList(ing.quantity, ing.unit, ing.description);

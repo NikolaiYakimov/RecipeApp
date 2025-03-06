@@ -44,7 +44,6 @@ class AddRecipeView extends View {
           </div>
         </div>`;
       this._columnIngredient.insertAdjacentHTML('beforeend', markup);
-      console.log('AAAAAAAAAAAAAAA');
     });
   }
   addHandlerUpload(handler) {

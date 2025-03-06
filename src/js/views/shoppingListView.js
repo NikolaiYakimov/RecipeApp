@@ -8,12 +8,15 @@ class ShoppingListView extends View {
   _successMessage = '';
 
   _generateMarkup() {
+    console.log(this._data);
     return this._data
       .map(el => {
         return `
     <li class="shopping__item" data-itemid=${el.id}>
           <div class="shopping__count">
-            <input type="number" value="${el.count}" step="${el.count}" class="shopping__count-value">
+            <input type="number" value="${
+              el.quantity ? el.quantity : ''
+            }" step="${el.quantity}" class="shopping__count-value">
             <p>${el.unit}</p>
           </div>
           <p class="shopping__description">${el.ingredient}</p>
