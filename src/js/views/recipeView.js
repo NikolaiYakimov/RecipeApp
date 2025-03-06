@@ -33,7 +33,7 @@ class RecipeView extends View {
   }
   addHandlerAddToShoppingList(handler) {
     this._parentElement.addEventListener('click', function (e) {
-      const btn = e.target.closest('.recipe__btn');
+      const btn = e.target.closest('.recipe__btn--add');
       if (!btn) return;
       // console.log('AAAAAAAAAAA');
       handler();
@@ -106,7 +106,7 @@ class RecipeView extends View {
     ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
     
     </ul>
-    <button class="btn--small recipe__btn">
+    <button class="btn--small recipe__btn recipe__btn--add">
       <svg class="search__icon">
         <use href="${icons}#icon-shopping-cart"></use>
       </svg>

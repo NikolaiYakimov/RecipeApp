@@ -215,6 +215,6 @@ export const deleteItemFromShoppingList = function (id) {
   state.items.splice(index, 1);
 };
 
-export const updateItemCount = function (id, count) {
-  state.items.find(item => (item.id = id)).quantity = quantity;
+export const updateItemCount = function (id, quantity) {
+  state.items.find(item => item.id === id).quantity = quantity;
 };

@@ -7,6 +7,27 @@ class ShoppingListView extends View {
   _errorMessage = 'No recipes founded for your query.Please try again!';
   _successMessage = '';
 
+  addHandlerRemoveIngredient = function (handler) {
+    this._parentElement.addEventListener('click', function (event) {
+      //   console.log(_data);
+      const item = event.target.closest('.shopping__item');
+      if (event.target.matches('.shopping__delete, .shopping__delete *')) {
+        const id = item.dataset.itemid;
+        handler(id);
+      }
+    });
+  };
+
+  addHandlerUpdateIngredient = function (handler) {
+    this._parentElement.addEventListener('click', function (event) {
+      const item = event.target.closest('.shopping__item');
+      if (event.target.matches('.shopping__count-value')) {
+        const id = item.dataset.itemid;
+        const value = parseFloat(event.target.value);
+        handler(id, value);
+      }
+    });
+  };
   _generateMarkup() {
     console.log(this._data);
     return this._data
@@ -22,7 +43,8 @@ class ShoppingListView extends View {
           <p class="shopping__description">${el.ingredient}</p>
           <button class="shopping__delete btn-tiny">
             <svg>
-              <!-- <use href="img/icons.svg#icon-circle-with-cross"></use> -->
+               <use href="${icons}#icon-circle-with-cross"></use>
+               
             </svg>
           </button>
         </li>
@@ -39,3 +61,6 @@ class ShoppingListView extends View {
   }
 }
 export default new ShoppingListView();
+{
+  /* <use href="${icons}#icon-circle-with-cross"></use>; */
+}

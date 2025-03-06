@@ -139,14 +139,21 @@ const controlShoppingList = function () {
   model.state.recipe.ingredients.forEach(ing => {
     model.addItemToShoppingList(ing.quantity, ing.unit, ing.description);
   });
-  console.log(model.state.items);
   shoppingListView.render(model.state.items);
   // model.addItemToShoppingList(1, 'kg', 'tomato');
   // model.addItemToShoppingList(2, 'kg', 'potato');
 };
-// console.log(model.state.recipe.ingredients);
-// controlShoppingList();
-// console.log(model.state.recipe);
+
+const controlDeleteShoppingItem = function (id) {
+  model.deleteItemFromShoppingList(id);
+  shoppingListView.deleteItem(id);
+  // shoppingListView.render(model.state.items);
+  console.log(model.state.items);
+};
+const controlUpdateIngredientItem = function (id, quantity) {
+  model.updateItemCount(id, quantity);
+  console.log(model.state.items);
+};
 //Implement publisher-subscribe pattern
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
@@ -154,6 +161,8 @@ const init = function () {
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   recipeView.addHandlerAddToShoppingList(controlShoppingList);
+  shoppingListView.addHandlerRemoveIngredient(controlDeleteShoppingItem);
+  shoppingListView.addHandlerUpdateIngredient(controlUpdateIngredientItem);
   searchView.addHandlerSearches(controlSearchResults);
   resultSortView.addHandlerSortSearches(controlResultsSorts);
   paginationView.addHandlerClick(controlPagination);
