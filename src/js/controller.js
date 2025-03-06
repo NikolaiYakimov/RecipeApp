@@ -7,6 +7,7 @@ import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
 import addRecipeView from './views/addRecipeView.js';
 import resultSortView from './views/resultSortView.js';
+import shoppingListView from './views/shoppingListView.js';
 
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
@@ -130,17 +131,36 @@ const controlResultsSorts = function (sortType) {
     resultSortView.renderError(err.message);
   }
 };
+
+const controlShoppingList = function () {
+  //Create a new list If there is none yet
+
+  model.state.recipe.ingredients.forEach(ing => {
+    model.addItemToShoppingList(ing.quantity, ing.unit, ing.description);
+  });
+  console.log(model.state.items);
+  shoppingListView.render(model.state.items);
+  // model.addItemToShoppingList(1, 'kg', 'tomato');
+  // model.addItemToShoppingList(2, 'kg', 'potato');
+};
+// console.log(model.state.recipe.ingredients);
+// controlShoppingList();
+// console.log(model.state.recipe);
 //Implement publisher-subscribe pattern
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
+  recipeView.addHandlerAddToShoppingList(controlShoppingList);
   searchView.addHandlerSearches(controlSearchResults);
   resultSortView.addHandlerSortSearches(controlResultsSorts);
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
   addRecipeView.addHandlerAddIngredient();
+  // setTimeout(function () {
+  //   controlShoppingList();
+  // }, 3000);
 };
 
 init();

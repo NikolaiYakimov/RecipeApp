@@ -2,6 +2,7 @@ import { async } from 'regenerator-runtime';
 import { API_URL, KEY, RESULT_PER_PAGE } from './config.js';
 // import { getJson, sendJson } from './helper.js';
 import { AJAX } from './helper.js';
+import uniqid from 'uniqid';
 
 export const state = {
   recipe: {},
@@ -12,6 +13,7 @@ export const state = {
     page: 1,
   },
   bookmarks: [],
+  items: [],
 };
 
 const createRecipeObject = function (data) {
@@ -196,4 +198,23 @@ export const sortResults = function (sortType) {
     console.error(err);
     throw err;
   }
+};
+
+export const addItemToShoppingList = function (quantity, unit, ingredient) {
+  const item = {
+    id: uniqid(),
+    quantity,
+    unit,
+    ingredient,
+  };
+  state.items.push(item);
+};
+
+export const deleteItemFromShoppingList = function (id) {
+  const index = state.items.findIndex(item => item.id === id);
+  state.items.splice(index, 1);
+};
+
+export const updateItemCount = function (id, count) {
+  state.items.find(item => (item.id = id)).quantity = quantity;
 };

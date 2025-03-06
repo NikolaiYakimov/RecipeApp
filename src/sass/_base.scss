@@ -48,7 +48,7 @@ body {
 }
 
 .container {
-  max-width: 120rem;
+  max-width: 160rem;
   min-height: 117rem;
   margin: 4vw auto;
   background-color: #fff;
@@ -58,10 +58,10 @@ body {
 
   display: grid;
   grid-template-rows: 10rem minmax(100rem, auto);
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 2fr 1fr;
   grid-template-areas:
-    'head head'
-    'list recipe';
+    'head head head'
+    'list recipe shopping';
 
   @media only screen and (max-width: $bp-large) {
     max-width: 100%;

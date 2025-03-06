@@ -31,6 +31,14 @@ class RecipeView extends View {
       handler();
     });
   }
+  addHandlerAddToShoppingList(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.recipe__btn');
+      if (!btn) return;
+      // console.log('AAAAAAAAAAA');
+      handler();
+    });
+  }
   _generateMarkup() {
     return `  <figure class="recipe__fig">
     <img src="${this._data.image}" alt="${
@@ -98,6 +106,12 @@ class RecipeView extends View {
     ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
     
     </ul>
+    <button class="btn--small recipe__btn">
+      <svg class="search__icon">
+        <use href="${icons}#icon-shopping-cart"></use>
+      </svg>
+      <span>Add to shopping list</span>
+      </button>
   </div>
 
   <div class="recipe__directions">
