@@ -1,5 +1,6 @@
 import { async } from 'regenerator-runtime';
-import { API_URL, KEY, RESULT_PER_PAGE } from './config.js';
+import { API_URL, RESULT_PER_PAGE } from './config.js';
+import { FORKIFY_API_KEY, SPOONACULAR_API_KEY } from './apiKeys.js';
 // import { getJson, sendJson } from './helper.js';
 import { AJAX } from './helper.js';
 import uniqid from 'uniqid';
@@ -16,6 +17,66 @@ export const state = {
   items: [],
 };
 
+//Get the calories for each ingredient and for the whole recipe
+const calculateRecipesCalories = async function (ingredientsArray) {
+  try {
+    const ingredientsList = ingredientsArray
+      .map(ing => {
+        const quantity = ing.quantity || '';
+        const unit = ing.unit || '';
+        const description = ing.description || '';
+        return `${quantity} ${unit} ${description}}`.trim();
+      })
+      .join('\n');
+
+    //Create URL encoded string for the fetch request body
+    const params = new URLSearchParams();
+    params.append('ingredientList', ingredientsList);
+    params.append('servings', `${state.recipe.servings}`);
+    params.append('includeNutrition', 'true');
+
+    //Make Post request to the API
+
+    const response = await fetch(
+      `https://api.spoonacular.com/recipes/parseIngredients?apiKey=${SPOONACULAR_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Spoonacular API error: ${response.status} ${response.statusText}`
+      );
+    }
+    const data = await response.json();
+    let totalCalories = 0;
+
+    data.forEach((parsedIng, i) => {
+      if (parsedIng.nutrition && parsedIng.nutrition.nutrients) {
+        const calNutrient = parsedIng.nutrition.nutrients.find(
+          nutrient => nutrient.name === 'Calories'
+        );
+
+        if (calNutrient) {
+          ingredientsArray[i].calories = Math.round(calNutrient.amount);
+          totalCalories += calNutrient.amount;
+        } else {
+          ingredientsArray[i].calories = 0;
+        }
+      } else {
+        ingredientsArray[i].calories = 0;
+      }
+    });
+    return Math.round(totalCalories);
+  } catch (err) {
+    console.error('Грешка при извличане на калории:', err);
+    throw err;
+  }
+};
 const createRecipeObject = function (data) {
   const { recipe } = data.data;
 
@@ -27,6 +88,10 @@ const createRecipeObject = function (data) {
     image: recipe.image_url,
     servings: recipe.servings,
     cookingTime: recipe.cooking_time,
+    // ingredients: ingredients.map((ing, i) => ({
+    //   ...ing,
+    //   calories: caloriesList[i],
+    // })),
     ingredients: recipe.ingredients,
     ...(recipe.key && { key: recipe.key }),
   };
@@ -34,13 +99,19 @@ const createRecipeObject = function (data) {
 //Only change the state obj
 export const loadRecipe = async function (id) {
   try {
-    const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
+    const data = await AJAX(`${API_URL}${id}?key=${FORKIFY_API_KEY}`);
     state.recipe = createRecipeObject(data);
+
     if (state.bookmarks.some(bookmark => bookmark.id === id)) {
       state.recipe.bookmarked = true;
     } else {
       state.recipe.bookmarked = false;
     }
+
+    const totalCalories = await calculateRecipesCalories(
+      state.recipe.ingredients
+    );
+    state.recipe.totalCalories = totalCalories;
   } catch (err) {
     console.error(`${err} !!!!`);
     // alert(err);
@@ -54,11 +125,15 @@ export const loadRecipe = async function (id) {
 export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
-    const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
+    const data = await AJAX(
+      `${API_URL}?search=${query}&key=${FORKIFY_API_KEY}`
+    );
     //Add the full data about the recipes, so we can use it in sortResults method
     const fullRecipes = await Promise.all(
       data.data.recipes.map(async rec => {
-        const fullData = await AJAX(`${API_URL}${rec.id}?key=${KEY}`);
+        const fullData = await AJAX(
+          `${API_URL}${rec.id}?key=${FORKIFY_API_KEY}`
+        );
         return createRecipeObject(fullData);
       })
     );
@@ -94,7 +169,6 @@ export const getSearchResultsPage = function (page = state.search.page) {
 };
 
 export const updateServings = function (newServings) {
-  console.log(state.recipe.ingredients);
   state.recipe.ingredients.forEach(ing => {
     ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
   });
@@ -166,7 +240,7 @@ export const uploadRecipe = async function (newRecipe) {
       ingredients: formattedIngredients,
     };
 
-    const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
+    const data = await AJAX(`${API_URL}?key=${FORKIFY_API_KEY}`, recipe);
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
   } catch (err) {

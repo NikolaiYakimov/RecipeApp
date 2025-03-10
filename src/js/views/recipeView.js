@@ -19,7 +19,6 @@ class RecipeView extends View {
       //check if the clicked target is not the button, and return nothing if is like that
       if (!btn) return;
       const { updateTo } = btn.dataset;
-      console.log(Number(updateTo));
       if (Number(updateTo) > 0) handler(Number(updateTo));
     });
   }
@@ -83,8 +82,20 @@ class RecipeView extends View {
             <use href="${icons}#icon-plus-circle"></use>
           </svg>
         </button>
+        
       </div>
     </div>
+
+     
+      <div class="recipe__info">
+        <span class="recipe__info-data recipe__info-data--people">${
+          this._data.totalCalories
+        }</span>
+      <span class="recipe__info-text">Calories
+</span>
+       </div>
+  
+   
 
     <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
       <svg>
@@ -145,7 +156,7 @@ class RecipeView extends View {
         }</div>
         <div class="recipe__description">
           <span class="recipe__unit">${ingredient.unit}</span>
-          ${ingredient.description}
+          ${ingredient.description} (${ingredient.calories} cal.)
         </div>
       </li>`;
   }
