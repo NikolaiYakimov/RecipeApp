@@ -172,6 +172,7 @@ const init = function () {
 
   console.log('Welcome to my app');
   console.log('You are welcome');
+  console.log('Some text to check the git connection to netlify');
 
   // setTimeout(function () {
   //   controlShoppingList();
