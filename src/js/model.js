@@ -89,9 +89,7 @@ const createRecipeObject = function (data) {
     servings: recipe.servings,
     cookingTime: recipe.cooking_time,
     // ingredients: ingredients.map((ing, i) => ({
-    //   ...ing,
-    //   calories: caloriesList[i],
-    // })),
+
     ingredients: recipe.ingredients,
     ...(recipe.key && { key: recipe.key }),
   };
@@ -171,7 +169,17 @@ export const getSearchResultsPage = function (page = state.search.page) {
 export const updateServings = function (newServings) {
   state.recipe.ingredients.forEach(ing => {
     ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
+    if (ing.calories) {
+      ing.calories = Math.round(
+        (ing.calories * newServings) / state.recipe.servings
+      );
+    }
   });
+
+  state.recipe.totalCalories = state.recipe.ingredients.reduce(
+    (total, ing) => total + (ing.calories || 0),
+    0
+  );
 
   state.recipe.servings = newServings;
 };

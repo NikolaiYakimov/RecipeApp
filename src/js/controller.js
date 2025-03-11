@@ -77,8 +77,9 @@ const controlServings = function (newServings) {
   //Update the recipe servings (in state)
   model.updateServings(newServings);
   //Update the recipe view
-  // recipeView.render(model.state.recipe);
-  recipeView.update(model.state.recipe);
+  //We use render now because  the update method didn't change the calories of the ingredients after we update the servings
+  recipeView.render(model.state.recipe);
+  // recipeView.update(model.state.recipe);
 };
 
 const controlAddBookmark = function () {
