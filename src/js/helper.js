@@ -1,4 +1,7 @@
 import { TIMEOUT_SEC } from './config.js';
+
+export const FORKIFY_API_KEY = '9206d41d-f7e3-470a-9bcd-63077d5f4a09';
+export const SPOONACULAR_API_KEY = '545ec99404be4cea8c4c19405cf3c156';
 const timeout = function (s) {
   return new Promise(function (_, reject) {
     setTimeout(function () {

@@ -1,6 +1,6 @@
 import { async } from 'regenerator-runtime';
 import { API_URL, RESULT_PER_PAGE } from './config.js';
-import { FORKIFY_API_KEY, SPOONACULAR_API_KEY } from './apiKeys.js';
+import { FORKIFY_API_KEY, SPOONACULAR_API_KEY } from './helper.js';
 // import { getJson, sendJson } from './helper.js';
 import { AJAX } from './helper.js';
 import uniqid from 'uniqid';
