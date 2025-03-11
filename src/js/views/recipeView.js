@@ -1,4 +1,4 @@
-import icons from 'url:../../img/icons.svg';
+import icons from '../../img/icons.svg';
 import View from './View.js';
 //import the fracy package
 import fracty from 'fracty';
@@ -51,7 +51,7 @@ class RecipeView extends View {
   <div class="recipe__details">
    <div class="recipe__info">
           <svg class="recipe__info-icon">
-            <use href="${icons}#icon-clock"></use>
+            <use xlink:href="${icons}#icon-clock"></use>
           </svg>
       <span class="recipe__info-data recipe__info-data--minutes">${
         this._data.cookingTime
@@ -60,7 +60,7 @@ class RecipeView extends View {
     </div>
     <div class="recipe__info">
       <svg class="recipe__info-icon">
-        <use href="${icons}#icon-users"></use>
+        <use xlink:href="${icons}#icon-users"></use>
       </svg>
       <span class="recipe__info-data recipe__info-data--people">${
         this._data.servings
@@ -72,14 +72,14 @@ class RecipeView extends View {
           this._data.servings - 1
         }">
           <svg>
-            <use href="${icons}#icon-minus-circle"></use>
+            <use xlink:href="${icons}#icon-minus-circle"></use>
           </svg>
         </button>
         <button class="btn--tiny btn--update-servings" data-update-to=${
           this._data.servings + 1
         }>
           <svg>
-            <use href="${icons}#icon-plus-circle"></use>
+            <use xlink:href="${icons}#icon-plus-circle"></use>
           </svg>
         </button>
         
@@ -99,12 +99,12 @@ class RecipeView extends View {
 
     <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
       <svg>
-        <use href="${icons}#icon-user"></use>
+        <use xlink:href="${icons}#icon-user"></use>
       </svg>
     </div>
     <button class="btn--round btn--bookmark">
       <svg class="">
-        <use href="${icons}#icon-bookmark${
+        <use xlink:href="${icons}#icon-bookmark${
       this._data.bookmarked ? '-fill' : ''
     }"></use>
       </svg>
@@ -119,7 +119,7 @@ class RecipeView extends View {
     </ul>
     <button class="btn--small recipe__btn recipe__btn--add">
       <svg class="search__icon">
-        <use href="${icons}#icon-shopping-cart"></use>
+        <use xlink:href="${icons}#icon-shopping-cart"></use>
       </svg>
       <span>Add to shopping list</span>
       </button>
@@ -141,7 +141,7 @@ class RecipeView extends View {
     >
       <span>Directions</span>
       <svg class="search__icon">
-        <use href="${icons}#icon-arrow-right"></use>
+        <use xlink:href="${icons}#icon-arrow-right"></use>
       </svg>
     </a>
   </div>`;
@@ -149,7 +149,7 @@ class RecipeView extends View {
   _generateMarkupIngredient(ingredient) {
     return `<li class="recipe__ingredient">
         <svg class="recipe__icon">
-          <use href="${icons}#icon-check"></use>
+          <use xlink:href="${icons}#icon-check"></use>
         </svg>
         <div class="recipe__quantity">${
           ingredient.quantity === null ? '' : fracty(ingredient.quantity)

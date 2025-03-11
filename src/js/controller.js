@@ -169,6 +169,10 @@ const init = function () {
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
   addRecipeView.addHandlerAddIngredient();
+
+  console.log('Welcome to my app');
+  console.log('You are welcome');
+
   // setTimeout(function () {
   //   controlShoppingList();
   // }, 3000);

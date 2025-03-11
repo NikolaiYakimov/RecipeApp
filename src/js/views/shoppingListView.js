@@ -43,7 +43,7 @@ class ShoppingListView extends View {
           <p class="shopping__description">${el.ingredient}</p>
           <button class="shopping__delete btn-tiny">
             <svg>
-               <use href="${icons}#icon-circle-with-cross"></use>
+               <use xlink:href="${icons}#icon-circle-with-cross"></use>
                
             </svg>
           </button>
